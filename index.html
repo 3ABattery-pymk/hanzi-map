@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hanzi Map: เรียนจีนจากคำตั้งต้น</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#faf9f5;--card:#fff;--ink:#1f1e1d;--mute:#6b6a65;--line:#e3e1d8;--acc:#c4472a;--accbg:#fbece7;--ok:#2f7d4f;--okbg:#e6f3ea;--bad:#b3352b;--badbg:#fbeaea}
+@media(prefers-color-scheme:dark){:root{--bg:#1d1c1a;--card:#292826;--ink:#f0eee6;--mute:#a3a198;--line:#3d3b37;--acc:#ec8a6f;--accbg:#3b2a24;--ok:#7fcf9c;--okbg:#22372b;--bad:#f09590;--badbg:#3d2625}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Noto Sans Thai","Noto Sans SC",system-ui,sans-serif}
+.zh{font-family:"Noto Sans SC","Noto Sans Thai",sans-serif}
+main{max-width:860px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:22px;font-weight:500;margin:0}
+.sub{color:var(--mute);font-size:14px;margin:2px 0 16px}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+nav button,.chipbtn{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:7px 14px;border-radius:8px;cursor:pointer}
+nav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tg{margin-left:auto;font-size:13px;color:var(--mute);display:flex;gap:6px;align-items:center;cursor:pointer}
+.hubs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.hub{width:56px;height:56px;border-radius:8px;border:2px solid var(--line);background:var(--card);color:var(--ink);font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.hub.on{border-color:var(--acc);background:var(--accbg)}
+.hub .d{position:absolute}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.big{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.big .ch{width:88px;height:88px;border:2px solid var(--acc);border-radius:10px;font-size:56px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--accbg)}
+.big .m{font-size:15px;color:var(--mute)}
+.big .m b{display:block;font-size:20px;font-weight:500;color:var(--ink)}
+.arrow{text-align:center;color:var(--mute);font-size:22px;margin:4px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.item{border:1px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;background:var(--bg);font:inherit;color:var(--ink)}
+.item:hover{border-color:var(--acc)}
+.item b{display:block;font-size:24px;font-weight:500}
+.item .py{display:block;font-size:12px;color:var(--mute)}
+.item .th{display:block;font-size:13px}
+.hidepy .py{visibility:hidden}
+.hint{font-size:13px;color:var(--mute);margin-top:12px}
+.card{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;gap:6px}
+.card .z{font-size:60px;line-height:1.2;font-weight:500}
+.card .p{font-size:18px;color:var(--mute)}
+.card .t{font-size:24px;color:var(--acc)}
+.row{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.btn{font:inherit;font-size:15px;padding:9px 18px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.btn.ok{background:var(--okbg);color:var(--ok);border-color:var(--ok)}
+.btn.no{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
+.stat{font-size:13px;color:var(--mute);text-align:center;margin-bottom:10px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:480px){.opts{grid-template-columns:1fr}}
+.opt{font:inherit;font-size:16px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opt.right{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--badbg);border-color:var(--bad);color:var(--bad)}
+.q{text-align:center}.q .z{font-size:52px;font-weight:500}.q .p{color:var(--mute)}
+.foot{margin-top:28px;font-size:12px;color:var(--mute)}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<main>
+<h1>Hanzi Map</h1>
+<p class="sub">เรียนภาษาจีนจากคำตั้งต้น แล้วต่อยอดเป็นวลีที่ใช้บ่อย</p>
+<nav>
+  <button data-v="map" class="on">แผนผัง</button>
+  <button data-v="flash">แฟลชการ์ด</button>
+  <button data-v="quiz">ทดสอบ</button>
+  <label class="tg"><input type="checkbox" id="pyt" checked> แสดงพินอิน</label>
+</nav>
+
+<section id="v-map">
+  <div class="hubs" id="hubs"></div>
+  <div class="panel" id="hubpanel"></div>
+  <p class="hint">แตะตัวอักษรหรือวลีเพื่อฟังเสียง (ถ้าเบราว์เซอร์รองรับเสียงภาษาจีน)</p>
+</section>
+
+<section id="v-flash" class="hidden">
+  <div class="stat" id="fstat"></div>
+  <div class="panel card" id="fcard"></div>
+  <div class="row">
+    <button class="btn no" id="fno">ยังไม่จำ</button>
+    <button class="btn" id="fsay">ฟังเสียง</button>
+    <button class="btn ok" id="fyes">จำได้</button>
+  </div>
+  <div class="row"><button class="btn" id="freset">เริ่มชุดใหม่</button></div>
+</section>
+
+<section id="v-quiz" class="hidden">
+  <div class="stat" id="qstat"></div>
+  <div class="panel q" id="qbox"></div>
+</section>
+
+<p class="foot">คำและความหมายไทยในหน้านี้เป็นตัวอย่างต้นแบบ เรียบเรียงโดย AI ควรให้ผู้รู้ภาษาจีนตรวจก่อนใช้สอนจริง รายการคำศัพท์เต็มดูได้ที่ <a href="https://pandachinese.online/words/levels/hsk-1/">pandachinese.online/words</a></p>
+</main>
+
+<script>
+const DATA=[
+{c:"我",py:"wǒ",th:"ฉัน",w:[["我是","wǒ shì","ฉันเป็น / ฉันคือ"],["我要","wǒ yào","ฉันต้องการ"],["我想","wǒ xiǎng","ฉันอยากจะ"],["我爱","wǒ ài","ฉันรัก"],["我的","wǒ de","ของฉัน"],["我们","wǒmen","พวกเรา"]]},
+{c:"你",py:"nǐ",th:"คุณ",w:[["你好","nǐ hǎo","สวัสดี"],["你是","nǐ shì","คุณเป็น"],["你要","nǐ yào","คุณต้องการ"],["你有","nǐ yǒu","คุณมี"],["你们","nǐmen","พวกคุณ"],["你的","nǐ de","ของคุณ"]]},
+{c:"他",py:"tā",th:"เขา",w:[["他是","tā shì","เขาเป็น"],["他们","tāmen","พวกเขา"],["他的","tā de","ของเขา"],["他在","tā zài","เขาอยู่"],["他说","tā shuō","เขาพูด"],["他有","tā yǒu","เขามี"]]},
+{c:"是",py:"shì",th:"เป็น / คือ",w:[["是的","shì de","ใช่"],["是吗","shì ma","ใช่เหรอ"],["不是","bú shì","ไม่ใช่"],["就是","jiùshì","ก็คือ"],["还是","háishi","หรือ / ยังคง"],["是不是","shì bu shì","ใช่ไหม"]]},
+{c:"不",py:"bù",th:"ไม่",w:[["不是","bú shì","ไม่ใช่"],["不要","bú yào","ไม่เอา"],["不会","bú huì","ไม่เป็น"],["不对","bú duì","ไม่ถูก"],["不好","bù hǎo","ไม่ดี"],["不知道","bù zhīdào","ไม่รู้"]]},
+{c:"有",py:"yǒu",th:"มี",w:[["我有","wǒ yǒu","ฉันมี"],["有人","yǒu rén","มีคน"],["有点","yǒudiǎn","นิดหน่อย"],["有用","yǒuyòng","มีประโยชน์"],["有吗","yǒu ma","มีไหม"],["没有","méiyǒu","ไม่มี"]]},
+{c:"在",py:"zài",th:"อยู่ที่ / กำลัง",w:[["在这","zài zhè","อยู่ที่นี่"],["在家","zài jiā","อยู่บ้าน"],["在看","zài kàn","กำลังดู"],["在喝","zài hē","กำลังดื่ม"],["现在","xiànzài","ตอนนี้"],["不在","bú zài","ไม่อยู่"]]},
+{c:"吗",py:"ma",th:"ไหม (คำถามใช่/ไม่ใช่)",w:[["好吗","hǎo ma","ดีไหม"],["对吗","duì ma","ถูกไหม"],["是吗","shì ma","ใช่เหรอ"],["行吗","xíng ma","ได้ไหม"],["有吗","yǒu ma","มีไหม"],["吃吗","chī ma","กินไหม"]]},
+{c:"的",py:"de",th:"ของ / คำเชื่อม",w:[["我的","wǒ de","ของฉัน"],["你的","nǐ de","ของคุณ"],["他的","tā de","ของเขา"],["好的","hǎo de","โอเค / ดีนะ"],["真的","zhēn de","จริง ๆ"],["的时候","de shíhou","ตอนที่"]]},
+{c:"了",py:"le",th:"แล้ว (เสร็จสิ้น/เปลี่ยนสถานะ)",w:[["好了","hǎo le","เรียบร้อย / ได้แล้ว"],["吃了","chī le","กินแล้ว"],["去了","qù le","ไปแล้ว"],["没了","méi le","หมดแล้ว"],["太好了","tài hǎo le","ดีมากเลย"],["知道了","zhīdào le","เข้าใจแล้ว"]]}
+];
+const ALL=[];DATA.forEach(h=>h.w.forEach(w=>{if(!ALL.some(a=>a[0]===w[0]))ALL.push(w)}));
+const $=s=>document.querySelector(s);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function say(t){try{if(!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="zh-CN";u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+
+let cur=0;
+function renderHubs(){
+  $("#hubs").innerHTML=DATA.map((h,i)=>`<button class="hub zh ${i===cur?'on':''}" data-i="${i}" aria-label="${h.c}">${h.c}</button>`).join("");
+  const h=DATA[cur];
+  $("#hubpanel").innerHTML=`<div class="big"><div class="ch zh" data-say="${h.c}">${h.c}</div><div class="m"><span class="py">${h.py}</span><b>${h.th}</b></div></div>
+  <div class="arrow">↓</div>
+  <div class="grid">${h.w.map(w=>`<button class="item" data-say="${w[0]}"><b class="zh">${w[0]}</b><span class="py">${w[1]}</span><span class="th">${w[2]}</span></button>`).join("")}</div>`;
+}
+document.addEventListener("click",e=>{
+  const hb=e.target.closest(".hub");if(hb){cur=+hb.dataset.i;renderHubs();say(DATA[cur].c);return}
+  const s=e.target.closest("[data-say]");if(s)say(s.dataset.say);
+});
+$("#pyt").addEventListener("change",e=>{document.body.classList.toggle("hidepy",!e.target.checked);store.set("py",e.target.checked)});
+if(store.get("py",true)===false){$("#pyt").checked=false;document.body.classList.add("hidepy")}
+
+let deck=[],fi=0,flipped=false,known=new Set(store.get("known",[]));
+function newDeck(){deck=shuffle(ALL.filter(w=>!known.has(w[0])));if(!deck.length){known=new Set();store.set("known",[]);deck=shuffle(ALL)}fi=0;flipped=false;renderFlash()}
+function renderFlash(){
+  if(fi>=deck.length){$("#fcard").innerHTML=`<div class="z">เสร็จชุดนี้แล้ว</div><div class="p">จำได้แล้ว ${known.size}/${ALL.length} วลี</div>`;$("#fstat").textContent="";return}
+  const w=deck[fi];
+  $("#fstat").textContent=`การ์ดที่ ${fi+1}/${deck.length} · จำได้แล้ว ${known.size}/${ALL.length}`;
+  $("#fcard").innerHTML=flipped?`<div class="z zh">${w[0]}</div><div class="p py">${w[1]}</div><div class="t">${w[2]}</div>`:`<div class="z zh">${w[0]}</div><div class="p" style="font-size:13px">แตะเพื่อดูความหมาย</div>`;
+}
+$("#fcard").onclick=()=>{if(fi<deck.length){flipped=!flipped;renderFlash();if(flipped)say(deck[fi][0])}};
+$("#fsay").onclick=()=>{if(fi<deck.length)say(deck[fi][0])};
+$("#fyes").onclick=()=>{if(fi<deck.length){known.add(deck[fi][0]);store.set("known",[...known]);fi++;flipped=false;renderFlash()}};
+$("#fno").onclick=()=>{if(fi<deck.length){fi++;flipped=false;renderFlash()}};
+$("#freset").onclick=()=>{known=new Set();store.set("known",[]);newDeck()};
+
+let qs=[],qi=0,score=0;
+function newQuiz(){qs=shuffle(ALL).slice(0,10);qi=0;score=0;renderQ()}
+function renderQ(){
+  if(qi>=qs.length){$("#qstat").textContent="";$("#qbox").innerHTML=`<div class="z">${score}/${qs.length}</div><p>${score>=8?"เก่งมาก":score>=5?"ใช้ได้ ทบทวนอีกนิด":"ลองดูแผนผังและแฟลชการ์ดอีกรอบ"}</p><button class="btn" id="qagain">ทำใหม่</button>`;$("#qagain").onclick=newQuiz;return}
+  const w=qs[qi];
+  const wrong=shuffle(ALL.filter(a=>a[2]!==w[2])).slice(0,3);
+  const opts=shuffle([w,...wrong]);
+  $("#qstat").textContent=`ข้อ ${qi+1}/${qs.length} · คะแนน ${score}`;
+  $("#qbox").innerHTML=`<div class="z zh">${w[0]}</div><div class="p py">${w[1]}</div><div class="opts">${opts.map(o=>`<button class="opt" data-a="${o[2]}">${o[2]}</button>`).join("")}</div>`;
+  say(w[0]);
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const ok=b.dataset.a===w[2];if(ok)score++;
+    document.querySelectorAll(".opt").forEach(x=>{x.disabled=true;if(x.dataset.a===w[2])x.classList.add("right")});
+    if(!ok)b.classList.add("wrong");
+    setTimeout(()=>{qi++;renderQ()},ok?600:1400);
+  });
+}
+
+function show(v){
+  ["map","flash","quiz"].forEach(k=>$("#v-"+k).classList.toggle("hidden",k!==v));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
+  if(v==="flash"&&!deck.length)newDeck();
+  if(v==="quiz"&&!qs.length)newQuiz();
+}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{location.hash=b.dataset.v==="map"?"":b.dataset.v;});
+function route(){const h=location.hash.slice(1);show(["flash","quiz"].includes(h)?h:"map")}
+window.addEventListener("hashchange",route);
+renderHubs();route();
+</script>
+</body>
+</html>
